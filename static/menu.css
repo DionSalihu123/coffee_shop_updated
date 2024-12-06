@@ -1,0 +1,181 @@
+* {
+	 margin: 0;
+	 padding: 0;
+	 box-sizing: border-box;
+	 text-decoration:none;
+	 border:none; 
+	 outline:none;
+	 scroll-behavior: smooth;
+	 font-family: "Poppins",sans-serif;
+ }
+
+:root {
+	--background-color: #080808;
+	--text-color: white;
+	--main-color: #e4b381;
+}
+
+ body {
+	 width:100vw;
+	 height: 200vh;
+	 background-color: var(--background-color); 
+	 color: var(--text-color);
+ }
+
+.header {
+	position: fixed;
+	top:0;
+	left: 0;
+	width:100%;
+	padding: 2rem 9%;
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	background-color:rgba(0,0,0,0.6);
+	backdrop-filter: blur(20%); 
+	z-index:100;
+
+}
+
+
+.links {
+	width:40%;
+	display:flex;
+	justify-content:space-around;
+	list-style-type:none;
+}
+
+
+.links li a{
+	color: var(--text-color);
+	font-weight: 600;
+	transition: 0.3s ease;
+}
+
+
+.logo {
+	color: var(--text-color);
+	font-weight:800;
+	font-size:2rem; 
+	transition: 0.3s ease;
+	letter-spacing:0.1rem;
+
+}
+
+
+#coffe-font {
+	margin-right: 0.2rem;
+	color: var(--main-color);
+
+}
+
+
+.logo span {
+	color: var(--main-color);
+
+}
+
+.logo:hover {
+	transform: scale(1.1);
+}
+
+.links a:hover 
+{
+	color: var(--main-color);
+	border-bottom:2px solid var(--main-color);
+	font-size:1.2rem;
+}
+
+section  {
+    width: 100%;
+    height: 100%;
+	margin-top: 26vh;
+    display: flex;
+    justify-content:center;
+}
+
+
+.menu-items {
+    width: 70%;
+    height: 90%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 4vh; 
+}
+
+
+.cards {
+    display: flex;
+    flex-direction:column;
+    align-items: center;
+    justify-content: space-evenly;
+    border: 2px solid var(--main-color);
+    border-radius: 4rem; 
+	background-color: black;
+	transition: 0.3s ease;
+}
+
+.cards:hover {
+	transform: scale(1.1);
+}
+
+.first-item 
+{
+    grid-row: 1/2;
+    grid-column: 1/2;
+    width:100%;
+    height: 100%; 
+}
+
+
+.image {
+	border-radius: 4rem;
+	width: 22vw;
+	height: 40vh;
+	filter:brightness(90%);
+}
+
+.coffee-name {
+    font-size: 2rem;
+    color: var(--main-color);
+    letter-spacing: 0.1rem;
+}
+
+.cards p {
+    font-size: 1.5rem;
+    font-weight: 600;
+    font-style: italic;
+    letter-spacing: 0.2rem;
+}
+
+
+form {
+    width: 100%;
+    height: 20%;
+    display:flex;
+    justify-content: center; 
+    align-items:center;
+
+}
+
+.button {
+    width:40%;
+    height: 40%;
+    border-radius: 4rem;
+    font-size:1rem;
+    font-weight: 500;
+    color: white;
+    background-color: var(--main-color);
+    transition: 0.3s ease-in-out;
+}
+
+
+.button:hover {
+    transform: scale(1.05);
+    background: black;
+    color: var(--main-color);
+    border: 1px solid var(--main-color);
+    cursor: pointer;
+}
+

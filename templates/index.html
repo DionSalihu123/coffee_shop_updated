@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "UTF-8">
+		<meta name = "Author" content = "Dion Salihu Behar Mahmuti">
+		<meta name = "Description" content = "coffee shop website">
+		<meta name = "viewport" content = "width=device-width,initial-scale=1.0">
+		<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+		<title>CoffeShop </title>
+	</head>
+	<body>
+
+		<header class = "header">
+
+			<a href = "#home" class = "logo"><i class='bx bxs-coffee' id = "coffe-font" ></i>Coffe<span>SHOP</span></a>
+
+
+			<ul class = "links">
+				<li><a href = "#home">Home</a></li>
+				<li><a href = "#coffees">Coffees</a></li>
+				<li><a href = "#about">About us</a>
+				<li><a href = "#reviews">Reviews</a>
+				<li><a href = "#contact">Contact</a>
+				{% if username %}
+				<li style = "font-weight: 600">user -   {{ username["username"] }}</li>
+				{% endif %}
+			</ul>
+
+		</header>
+
+
+		<section id = "home" class = "home">
+
+			<div class = "home-content">
+				<p id = "welcome">Welcome to</p>
+
+				<h2 id = "title">Coffee<span>SHOP</span></h2>
+
+				<p id = "description">At CoffeShop, we believe that every cup of coffee tells a story. Our journey began with a passion for crafting the perfect
+				brew and a commitment to creating a space where the community can gather, connect, and recharge.</p>
+
+				<div class = "center-buttons">
+					{% if username %}
+					<a href = "{{ url_for("logout") }}">
+						<button type = "submit" class = 'button' id = "buton1">Logout</button>
+					</a>
+					{% else %}
+					<a href = "{{ url_for("login") }}">
+						<button type = "submit" class = 'button' id = "buton1">Login</button>
+					</a>
+					{% endif %}
+				</div>
+
+			</div>
+
+		</section>
+
+
+
+
+		<section id = "coffees" class = "coffees">
+
+			<h2 id = "coffee-title">Coffees</h2>
+
+			<div class = "cards">
+
+				<div class = "card" id = 'first-card'>
+
+					<img src = "/static/images/c1.png" class = "cards-img">
+
+					<h2 class = "cards-title">Macchiato</h2>
+
+					<p class = "cards-description">A macchiato is a classic Italian coffee drink that is known for its bold flavor and simplicity.
+					The term "macchiato" means "stained" or "spotted" in Italian,
+					which refers to the process of marking the espresso with a small amount of steamed milk.</p>
+
+
+				</div>
+
+				<div class = "card" id = "second-card">
+
+					<img src = "/static/images/c2.png" class = "cards-img" id = "c2-img">
+
+					<h2 class = "cards-title">Esspresso</h2>
+
+
+					<p class = "cards-description">Espresso is known for its strong and bold flavor. A typical shot of espresso is
+					about 1 ounce (30 ml) and contains a higher concentration of coffee oils, sugars, and dissolved solids than regular brewed coffee.</p>
+
+				</div>
+
+				<div class = "card" id = "third-card">
+
+					<img src = "/static/images/c3.png" class = "cards-img" id = "c3-img">
+
+
+					<h2 class = "cards-title" id = "latte-title">Latte </h2>
+
+					<p class = "cards-description">A latte is a popular coffee drink made with espresso and steamed milk. It's known for its smooth
+					and creamy texture, often topped with a small layer of foam. The ratio of milk to espresso gives it a mild, rich flavor, making it less
+					intense than a straight espresso but more robust than a cappuccino.</p>
+
+				</div>
+
+
+			</div>
+
+
+		<a href = "/menu">
+			<button type = "submit"  class = "button" id = "menu-button">View menu</button>
+		</a>
+
+
+		</section>
+
+
+		<section id = 'about' class = 'about'>
+
+			<div class = "about-content">
+				<h2 id = "about-title">About <span>Us</span></h2>
+
+				<p id = "about-description">
+				Here’s a description for an About Us section for a coffee shop that reflects the essence of quality coffee, community, and passion:
+
+				About Us - The Coffee Journey
+
+				At Coffee Shop , we believe coffee is more than just a drink; it’s an experience, a ritual, and a connection. Our journey began with a simple idea: 
+				to serve the perfect cup, sourced with care and brewed to perfection. We work closely with farmers who share our commitment to sustainability, ensuring
+				that every bean we roast has a story — one that starts in the fertile soils of the world's best coffee-growing regions.</p>
+
+
+				<button type = "submit"  id = "buton2">Read more</button>
+			</div>
+
+
+		</section>
+
+
+		<section id = "reviews" class = "reviews">
+
+			<h2 id = "rev-title">Costumers Reviews</h2>
+
+
+			<div class = "reviews-content">
+
+
+				<div class = "person1 rev-cards">
+
+
+					<div class = "starter-info" id = "person1-info">
+
+						<img src = "/static/profiles/image-kira.jpg" class = "img-reviewing" id = "person1-img" alt = "profile pic">
+						<h2 class = "name-info">Emma T. on Cappuccino (⭐⭐⭐⭐⭐)</h2>
+					</div>	
+
+					<div class = "reviewing">
+
+						<p class = "desc-info" id = "person1-review-desc">"The cappuccino here is out of this world! The balance between the espresso, steamed milk, and foam is perfect. I
+						especially loved the subtle hint of cinnamon they sprinkle on top—it adds just
+						the right amount of warmth. Definitely my go-to order every time I visit!"</p>
+
+
+					</div>
+
+				</div>
+
+
+
+					<div class = "person2 rev-cards">
+
+						<div class = "starter-info" id = "person2-info">
+
+							<img src = "/static/profiles/image-jeanette.jpg" class = "img-reviewing" id = "person2-img" alt = "profile pic">
+							<h2 class = "name-info">Ava M. on Cold Brew (⭐⭐⭐⭐⭐)</h2>
+
+						</div>
+
+						<div class = "reviewing">
+
+							<p class = "desc-info">"The cold brew here is a must-try! It’s smooth, not too bitter, and 
+							has this natural sweetness that makes it so refreshing. Pair it with one of their pastries, and you’ve got the perfect summer afternoon treat."</p>
+
+						</div>
+					</div>
+
+
+					<div class = "person3 rev-cards">
+
+						<div class = "starter-info" id = "person3-info">
+
+							<img src = "/static/profiles/image-patrick.jpg" class = "img-reviewing" id = "person3-img" alt = "profile pic">
+							<h2 class = "name-info">Liam P. on Flat White (⭐⭐⭐⭐⭐)</h2>
+
+						</div>
+
+						<div class = "reviewing">
+
+							<p class = "desc-info">
+							"The flat white is exceptional here! It’s creamy, smooth, and the perfect ratio of coffee to milk. You can really taste the quality 
+							of the beans they use. If you're a fan of velvety coffee drinks, you won’t be disappointed."
+							</p>
+						</div>
+					</div>
+
+
+					<div class = "person4 rev-cards">
+
+						<div class = "starter-info" id = "person4-info">
+
+							<img src = "/static/profiles/image-jonathan.jpg" class = "img-reviewing" id = "person4-img" alt = "profile pic">
+							<h2 class = "name-info">Jake L. on Espresso (⭐⭐⭐⭐)</h2>
+
+
+						</div>
+
+						<div class = "reviewing">
+
+							<p class = "desc-info">
+
+								"As someone who loves a good, strong espresso, this place delivers every time.
+								The rich, bold flavor is exactly what I need to kickstart my day. My only wish is that they served 
+								it with a tiny biscotti—would make it even better!"
+
+							</p>
+						</div>
+
+					</div>
+
+			</div>
+		</section>
+
+		<section id = 'contact' class = 'contact'>
+
+			<div class = "contact-content">
+				<nav class = "contact-icons">
+					<li><a href = ""><i class='bx bxl-linkedin'></i></a></li>
+					<li><a href = ""><i class='bx bxl-instagram' ></i></a></li>
+					<li><a href = ""><i class='bx bx-x' ></i></a></li>
+					<li><a href = ""><i class='bx bxl-facebook-circle'></i></a></li>
+
+				</nav>
+
+
+				<nav class = "about-links">
+					<li><a href = "#home">FAQ</a></li>
+					<li><a href = "">Products</a></li>
+					<li><a href = "#about">About us</a></li>
+					<li><a href = "#contact">Contact</a></li>
+					<li><a href = "">Privacy Police</a></li>
+				</nav>
+
+				<p>&copy;CoffeeShop|All rights reserved.</p>
+
+			</div>
+
+		</section>
+
+
+	</body>
+
+
+
+</html>

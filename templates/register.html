@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "UTF-8">
+		<meta name = "Author" content = "Dion Salihu Behar Mahmuti">
+		<meta name = "Description" content = "coffee shop website">
+		<meta name = "viewport" content = "width=device-width,initial-scale=1.0">
+		<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+		<title>CoffeShop login</title>
+	</head>
+	<body>
+
+
+
+		<div class = "login" >
+
+			<div class = "info">
+
+				<h1>Register and order!</h1>
+
+				{% if register_error %}
+				<p id = "error"> {{ register_error }}</p>
+				{% endif %} 
+
+				<form method = "POST" action = "{{ url_for('register') }}">
+						
+					<label for = "username">Username: 
+					<input type = "text" id = "username" name = "username">
+					</label>
+
+					<label for = "password">Password:
+					<input type = "password" id = "password" name = "password">
+					</label>
+
+					<button type = "submit" class = "button">Register</button>
+
+
+				</form>
+
+				<p>Already have an account? <a href = "/login">Login here</a></p>
+
+
+			</div>
+
+			<div class = "image">
+
+
+
+			</div>
+
+
+		</div>
+
+
+
+	</body>
+</html>

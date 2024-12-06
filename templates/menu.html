@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "UTF-8">
+		<meta name = "Author" content = "Dion Salihu Behar Mahmuti">
+		<meta name = "Description" content = "coffee shop website">
+		<meta name = "viewport" content = "width=device-width,initial-scale=1.0">
+		<link rel="stylesheet" href="{{ url_for('static', filename='menu.css') }}">
+		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+		<title>CoffeShop </title>
+	</head>
+	<body>
+
+		<header class = "header">
+
+			<a href = "/menu" class = "logo"><i class='bx bxs-coffee' id = "coffe-font" ></i>Coffe<span>SHOP</span></a>
+
+
+			<ul class = "links">
+				<li><a href = "/">Home</a></li>
+				<li><a href = "#coffees">Coffees</a></li>
+				<li><a href = "/about">About us</a>
+				{% if username %}
+				<li style = "font-weight: 600;">user - {{ username['username'] }}</li>
+				{% endif %}
+			</ul>
+
+		</header>
+
+		<section id = "coffees">
+
+			<div class = "menu-items" id = "coffees">
+
+
+
+				<div class = "cards first-item">
+					<img src = "/static/coffees/capuccino.jpg" alt = "cappuccino" class = "image" id = "first-pic" height = "300" width = "300" >
+
+					<h2 class = "coffee-name">Cappuccino</h2>
+
+					<p>$4.00</p>
+
+					<form method = "POST" action = "{{ url_for("menu") }}">
+						<input type = "hidden" name = "item" value = "Cappuccino">
+						<input type = "hidden" name = "price" value = "4.00">
+						<button type = "submit" class = "button" >Order Now</button>
+					</form>
+
+
+				</div>
+
+
+				<div class = "cards second-item">
+					
+					<img src = "/static/coffees/espresso.jpg" alt = "espresso" class = "image" id = "second-pic"> 
+
+					<h2 class = "coffee-name">Espresso</h2>
+
+					<p>$3.00</p>
+
+					<form method = "POST" action = "{{ url_for("menu") }}">
+						<input type = "hidden" name = "item" value = "Espresso">
+						<input type = "hidden" name = "price" value = "3.00">
+						<button type = "submit" class = "button">Order Now</button>
+					</form>
+
+				</div>
+
+
+			
+			<div class = "cards third-item">
+
+				<img src = "/static/coffees/mocha.jpg" alt = "mocha" class = "image" id = "third-pic">
+
+				<h2 class = "coffee-name">Mocha</h2>
+
+				<p>$5.00</p>
+
+				<form method = "POST" action = "{{url_for("menu") }}" >
+					<input type = "hidden" name = "item" value = "Mocha">
+					<input type = "hidden" name = "price" value = "5.00">
+					<button type = "submit" class = "button">Order Now</button>
+				</form>
+
+			</div>
+
+
+
+			<div class =  "cards fourth-item">
+
+				<img src = "/static/coffees/americano.jpg" alt = "amercano" class = "image" id = "fourth-pic">
+
+				<h2 class = "coffee-name">Americano</h2>
+
+				<p>$3.00</p>
+
+				<form method = "POST" action =" {{ url_for("menu") }}">
+					<input type = "hidden" name = "item" value = "Americano">
+					<input type = "hidden" name = "price" value = "3.00">
+					<button type = "submit" class = "button">Order Now</button>
+				</form>
+
+			</div>
+
+
+			
+			<div class = "cards fivth-item">
+
+				<img src = "/static/coffees/affogato.jpg" alt = "affogato" class = "image" id = "fivth-pic">
+
+				<h2 class = "coffee-name">Affogato</h2>
+
+				<p>$5.00</p>
+
+				<form method = "POST" action = "{{url_for("menu")}}">
+					<input type = "hidden" name = "item" value = "affogato">
+					<input type = "hidden" name = "price" value = "5.00">
+					<button type = "submit" class = "button">Order Now</button>
+				</form>
+
+			</div>
+
+			
+			<div class = "cards six-item">
+
+				<img src = "/static/coffees/french-press.jpg" alt = "frech-press" class = "image" id = "six-pic">
+
+				<h2 class = "coffee-name">Frech Press</h2>
+
+				<p>$4.00</p>
+
+				<form method = "POST" action = "{{url_for("menu") }}">
+					<input type = "hidden" name = "item" value = "frech-press">
+					<input type = "hidden" name = "price" value = "5.00">
+					<button type = "submit" class = "button">Order Now</button>
+				</form>
+
+			</div>
+
+
+			<div class = "cards seven-item">
+
+				<img src = "/static/coffees/piccolo-late.jpg" alt = "piccolo-latte" class = "image" id = "seven-pic">
+
+				<h2 class = "coffee-name">Piccolo Latte</h2>
+
+				<p>$4.00</p>
+
+				<form method = "POST" action = "{{url_for("menu")}} ">
+					<input type = "hidden" name = "item" value = "piccolo-latte">
+					<input type = "hidden" name = "price" value = "5.00">
+					<button type = "submit" class = "button">Order Now</button>
+				</form>
+
+			</div>
+
+			<div class = "cards eight-item">
+
+				<img src = "/static/coffees/cortado.jpg" alt = "cotado" class = "image" id = "eight-pic">
+
+				<h2 class = "coffee-name">Cortado</h2>
+
+				<p>$5.00</p>
+
+				<form method = "POST" action = "{{url_for("menu") }}">
+					<input type = "hidden" name = "item" value = "cortado">
+					<input type = "hidden" name = "price" value = "5.00">
+					<button type = "submit" class = "button">Order Now</button>
+				</form>
+
+			</div>
+
+
+			<div class = "cards nine-item">
+
+				<img src = "/static/coffees/frappuccino.jpg" alt = "frappuccino" class = "image" id = "nine-pic">
+
+				<h2 class = "coffee-name">Frappuccino</h2>
+
+				<p>$6.00</p>
+
+				<form method = "POST" action = "{{url_for("menu") }}">
+					<input type = "hidden" name = "item" value = "frappuccino">
+					<input type = "hidden" name = "price" value = "5.00">
+					<button type = "submit" class = "button">Order Now</button>
+				</form>
+
+			</div>
+
+
+
+			</div>
+
+		</section>
+
+
+
+	</body>
+
+</html>
