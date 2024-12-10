@@ -1,6 +1,7 @@
 from flask import Flask,render_template,request,url_for,redirect,session,jsonify 
 from database import get_database
 from werkzeug.security import generate_password_hash, check_password_hash 
+from responses import get_response
 import os
 
 app = Flask(__name__)
@@ -117,23 +118,24 @@ def about():
     return render_template("about.html",username = username)
 
 
-
-@app.route("/chatbot", methods=["POST"])
+@app.route("/chatbot", methods=["GET", "POST"])
 def chatbot():
-    data = request.json
-    if not data or "message" not in data:
-        return jsonify({"error": "Invalid request. 'message' is required."}), 400
+    # Serve the chatbot UI on GET request
+    if request.method == "GET":
+        return render_template("index.html")  # Your chatbot HTML
 
-    user_message = data["message"].lower()
-    responses = {
-        "hello": "Hi there! How can I help you?",
-        "what are your hours?": "We're open from 8 AM to 8 PM every day.",
-        "do you serve vegan options?": "Yes, we have a variety of vegan-friendly items!",
-        "goodbye": "Goodbye! Have a great day!",
-    }
+    # Handle POST request and respond with a message
+    if request.method == "POST":
+        data = request.json
+        if not data or "message" not in data:
+            return jsonify({"error": "Invalid request. 'message' is required."}), 400
 
-    response = responses.get(user_message, "I'm not sure about that. Can you ask differently?")
-    return jsonify({"response": response})
+        user_message = data["message"].lower()
+        response = get_response(user_message) 
+        return jsonify({"response": response})
+
+    return render_template("index.html")
+
 
 
 @app.route("/logout")

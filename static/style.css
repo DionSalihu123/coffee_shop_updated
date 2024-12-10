@@ -530,10 +530,12 @@
 }
 
 #chatbot-messages {
+	text-align: start;
 	flex-grow: 1;
 	padding: 10px;
 	overflow-y: auto;
 	font-size: 14px;
+	color: black;
 }
 
 #chatbot-form {
@@ -546,6 +548,7 @@
 	border: none;
 	padding: 10px;
 	font-size: 14px;
+	border-bottom-left-radius: 10px;
 }
 
 #chatbot-input:focus {
@@ -554,9 +557,17 @@
 
 #chatbot-form button {
 	background-color: #e4b381;
-	border: none;
 	color: white;
 	padding: 10px;
 	cursor: pointer;
+	border-bottom-right-radius: 10px;
+	font-weight: 500;
 }
 
+#close-chatbot {
+	width: 2vw;
+	border-radius: 3rem;
+	background-color: red;
+	color:white;
+	font-weight: 600;
+}
