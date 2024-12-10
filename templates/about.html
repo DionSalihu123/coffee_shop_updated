@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset = "UTF-8">
+		<meta name = "Author" content = "Dion Salihu Behar Mahmuti">
+		<meta name = "Description" content = "coffee shop website">
+		<meta name = "viewport" content = "width=device-width,initial-scale=1.0">
+		<link rel="stylesheet" href="{{ url_for('static', filename='about.css') }}">
+		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+		<title>About us </title>
+	</head>
+	<body>
+
+		<header class = "header">
+
+			<a href = "#story" class = "logo"><i class='bx bxs-coffee' id = "coffe-font" ></i>Coffe<span>SHOP</span></a>
+
+
+			<ul class = "links">
+				<li><a href = "#story">Our story</a></li>
+				<li><a href = "#awards">Awards</a></li>
+				<li><a href = "#contact">Contact</a>
+				<li><a href = "{{ url_for("home")}}">Home</a></li>
+				<li><a href = "{{ url_for("menu")}}">Coffees</a></li>
+				{% if username %}
+				<li  id = "provided-username"><i class='bx bxs-user'id = "user-logo" ></i>   {{ username }}</li>
+				{% endif %}
+			</ul>
+     	</header>
+
+
+		<section id = "story">
+
+			<div class = "wrapper">
+
+				<div class = "coffee-story">
+
+					<div class = "coffee-info">
+						<h2>Our Story</h2>
+
+						<p>Welcome to Coffee Shop , where passion for exceptional coffee meets a warm, inviting atmosphere. Our journey began in 1990  with a simple dream:
+						to create a space where coffee lovers could savor the perfect cup of coffee while feeling right at home.</p>
+						<p>Founded by "<strong>Dion Salihu</strong> and <strong>Behar Mahmuti</strong>", our coffee shop quickly became a cornerstone of the community. We take pride in 
+						sourcing the finest coffee beans from sustainable farms and perfecting every cup with expert craftsmanship.</p>
+						<p>Whether you're here to work, catch up with friends, or enjoy a quiet moment to yourself, Coffee Shop  is more than 
+						just a café—it's your home away from home.</p>
+					</div>
+				</div>
+
+				<div class = "image">
+
+				</div>
+
+			</div>
+
+		</section>
+
+
+		<section id = "awards">
+
+			<div class = "wrapper">
+
+				<div id = "image2" ></div>
+
+				<div class = "awards-info">
+
+					<dl>
+						<h2>Awards and Recognition</h2>
+						<p>At Coffee Shop, our passion for coffee and dedication to excellence have earned us several prestigious accolades over the years.
+						These awards reflect our commitment to quality, innovation, and creating memorable experiences for our customers</p>
+
+						<dt>- Best Coffee Shop of the Year 2023</dt>
+
+						<dd>Presented by the Global Coffee Excellence Awards, this honor celebrates our consistent quality,
+							innovative brewing techniques, and outstanding customer service.</dd>
+
+						<dt>- Customer Choice Award 2022</dt>
+						<dd>Voted by coffee lovers across the region, this award from Local Café Review Network highlights 
+							the trust and love our patrons have for our beverages and atmosphere.</dd>
+
+						<dt>- Barista Excellence Award 2020</dt>
+						<dd>Awarded by the National Barista Guild, this accolade acknowledges the skill, creativity, and passion of our talented team of baristas.</dd>
+
+					</dl>
+
+				</div>
+
+			</div>
+
+		</section>
+
+
+		<section id = 'contact' class = 'contact'>
+
+			<div class = "contact-content">
+				<nav class = "contact-icons">
+					<li><a href = ""><i class='bx bxl-linkedin'></i></a></li>
+					<li><a href = ""><i class='bx bxl-instagram' ></i></a></li>
+					<li><a href = ""><i class='bx bx-x' ></i></a></li>
+					<li><a href = ""><i class='bx bxl-facebook-circle'></i></a></li>
+
+				</nav>
+
+
+				<nav class = "about-links">
+					<li><a href = "#home">FAQ</a></li>
+					<li><a href = "">Products</a></li>
+					<li><a href = "#about">About us</a></li>
+					<li><a href = "#contact">Contact</a></li>
+					<li><a href = "">Privacy Police</a></li>
+				</nav>
+
+				<p>&copy;CoffeeShop|All rights reserved.</p>
+
+			</div>
+
+		</section>
+
+
+
+
+	</body>
+</html>

@@ -17,11 +17,12 @@
 
 
 			<ul class = "links">
-				<li><a href = "/">Home</a></li>
 				<li><a href = "#coffees">Coffees</a></li>
-				<li><a href = "/about">About us</a>
+				<li><a href = "#contact">Contact</a>
+				<li><a href = "{{url_for("home") }}">Home</a></li>
+				<li><a href = "{{url_for("about")}}">About us</a>
 				{% if username %}
-				<li style = "font-weight: 600;">user - {{ username['username'] }}</li>
+				<li  id = "provided-username"><i class='bx bxs-user'id = "user-logo" ></i>   {{ username }}</li>
 				{% endif %}
 			</ul>
 
@@ -192,6 +193,34 @@
 			</div>
 
 		</section>
+
+		
+		<section id = 'contact' class = 'contact'>
+
+			<div class = "contact-content">
+				<nav class = "contact-icons">
+					<li><a href = ""><i class='bx bxl-linkedin'></i></a></li>
+					<li><a href = ""><i class='bx bxl-instagram' ></i></a></li>
+					<li><a href = ""><i class='bx bx-x' ></i></a></li>
+					<li><a href = ""><i class='bx bxl-facebook-circle'></i></a></li>
+
+				</nav>
+
+
+				<nav class = "about-links">
+					<li><a href = "#home">FAQ</a></li>
+					<li><a href = "">Products</a></li>
+					<li><a href = "#about">About us</a></li>
+					<li><a href = "#contact">Contact</a></li>
+					<li><a href = "">Privacy Police</a></li>
+				</nav>
+
+				<p>&copy;CoffeeShop|All rights reserved.</p>
+
+			</div>
+
+		</section>
+
 
 
 

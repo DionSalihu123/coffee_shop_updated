@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request,url_for,redirect,session 
+from flask import Flask,render_template,request,url_for,redirect,session,jsonify 
 from database import get_database
 from werkzeug.security import generate_password_hash, check_password_hash 
 import os
@@ -8,13 +8,9 @@ app.config["SECRET_KEY"] = os.urandom(24)
 
 def get_current_user():
     user = None
-    #vlera defualt eshte none nuk nuk gjinder useri
-    if "user" in session:
-        user = session["user"]
-        db = get_database()
-        user_info = db.execute("select username from users where username = ?",[user]) 
-        user = user_info.fetchone() 
 
+    if "emri" in session:
+        user = session["emri"]
     return user 
 
 @app.route("/")
@@ -37,24 +33,19 @@ def login():
 
         db = get_database()
 
-        user_cursor = db.execute("select * from users where username = ?", [username])
-        #e marrim vetem username sepese nese e marirm dhe passwordin kur e shikojm condition user['passord'] jemi duke  e marr passin plain text
-        #dhe po e krahasojm me ate hashed shiko per me shume
+        user_info = db.execute("select * from users where username = ?", [username])
 
-        user = user_cursor.fetchone()  
+        user = user_info.fetchone()  
 
         if user:
             if check_password_hash(user["password"], user_entered_password): 
-                #nese perputhen passwodad e marrim ne session e krijojm nje key user_id dhe ja japim vleren e id
                 session['user_id'] = user['id']  
-                session['user'] = user['username']
-                #getting the id from the databse beacuse the user is the var that is fetching the specific user from the db
+                session['emri'] = user['username']
                 return redirect(url_for("home")) 
             else:
                 error = "please check your password!" 
 
     return  render_template("login.html", loginerror = error,user_name = user_name)
-#vlerat ne html i fergojm nga render_template
 
 
 @app.route("/register", methods = ["POST", "GET"])
@@ -64,25 +55,28 @@ def register():
     register_error = None 
 
     if request.method == "POST":
-        #collect the user info from the forms
         username = request.form["username"] 
+        lastname = request.form["lastname"]
+        email = request.form["email"]
         password = request.form["password"]
 
         hashed_password = generate_password_hash(password)  
         
-        #connect to database
         db = get_database() 
         
-        check_user = db.execute("select * from users where username = ?",[username]) 
+        check_user = db.execute("select * from users where username = ? or email = ?",[username,email]) 
         existing_user = check_user.fetchone()
 
         if existing_user: 
-            register_error = "this username already exsist!" 
-            return render_template("register.html",register_error = register_error)
+            if existing_user["username"] == username:
+                register_error = "this username already exsist!" 
+                return render_template("register.html",register_error = register_error)
+            elif existing_user["email"] == email:
+                register_error = "this email already exsist!"
+                return render_template("register.html",register_error = register_error)
 
 
-            #sql query to insert the data into the database
-        db.execute("insert into users (username,password) values (? , ?)", [username,hashed_password])
+        db.execute("insert into users (username,lastname,email,password) values (? , ?, ?, ?)", [username,lastname,email,hashed_password])
 
         db.commit()
 
@@ -113,6 +107,33 @@ def menu():
 
     return render_template("menu.html",username = username)
  
+
+
+@app.route("/about")
+def about():
+    username = get_current_user()
+
+
+    return render_template("about.html",username = username)
+
+
+
+@app.route("/chatbot", methods=["POST"])
+def chatbot():
+    data = request.json
+    if not data or "message" not in data:
+        return jsonify({"error": "Invalid request. 'message' is required."}), 400
+
+    user_message = data["message"].lower()
+    responses = {
+        "hello": "Hi there! How can I help you?",
+        "what are your hours?": "We're open from 8 AM to 8 PM every day.",
+        "do you serve vegan options?": "Yes, we have a variety of vegan-friendly items!",
+        "goodbye": "Goodbye! Have a great day!",
+    }
+
+    response = responses.get(user_message, "I'm not sure about that. Can you ask differently?")
+    return jsonify({"response": response})
 
 
 @app.route("/logout")

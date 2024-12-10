@@ -23,7 +23,7 @@
 				<li><a href = "#reviews">Reviews</a>
 				<li><a href = "#contact">Contact</a>
 				{% if username %}
-				<li style = "font-weight: 600">user -   {{ username["username"] }}</li>
+ 				<li  id = "provided-username"><i class='bx bxs-user'id = "user-logo" ></i>   {{ username }}</li>
 				{% endif %}
 			</ul>
 
@@ -51,6 +51,24 @@
 					</a>
 					{% endif %}
 				</div>
+
+				<!-- Chatbot Button -->
+				<button id="chatbot-button" onclick="toggleChatbot()">Chat with us!</button>
+
+				<!-- Chatbot Interface -->
+				<div id="chatbot-container">
+					<div id="chatbot-header">
+						<span>Chatbot</span>
+						<button id="close-chatbot" onclick="toggleChatbot()">X</button>
+					</div>
+					<div id="chatbot-messages"></div>
+					<form id="chatbot-form" method="POST">
+						<input type="text" id="chatbot-input" placeholder="Type your question..." required>
+						<button type="submit">Send</button>
+					</form>
+				</div>
+
+				<script src = "{{url_for("static",filename = 'script.js') }}"></script>
 
 			</div>
 
@@ -129,8 +147,12 @@
 				to serve the perfect cup, sourced with care and brewed to perfection. We work closely with farmers who share our commitment to sustainability, ensuring
 				that every bean we roast has a story — one that starts in the fertile soils of the world's best coffee-growing regions.</p>
 
+				<div class = "center-buttons">
+					<a href = " {{url_for("about") }}">
+						<button type = "submit"  class = "button" id = "buton2">Read more</button>
+					</a>
+				</div>
 
-				<button type = "submit"  id = "buton2">Read more</button>
 			</div>
 
 
@@ -256,6 +278,7 @@
 
 		</section>
 
+		<script src = "{{url_for("static",filename = 'script.js') }}"></script>
 
 	</body>
 

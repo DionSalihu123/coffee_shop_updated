@@ -1,0 +1,12 @@
+.login {
+	height: 65%;
+}
+
+
+#username, #email {
+	margin-left: 2.7vw;
+}
+
+.info p {
+	margin-top: 3vh;
+}

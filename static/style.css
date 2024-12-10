@@ -88,6 +88,21 @@
 	font-size:1.2rem;
 }
 
+#provided-username {
+	align-self: center;
+	justify-self: center;
+	font-size: 1.1rem;
+	font-weight: 600;
+
+}
+
+
+#user-logo {
+	color: white;
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
 .home {
     grid-row: 1/2;
     background-image: url('/static/images/coffe.jpg');
@@ -242,28 +257,11 @@
 	font-weight:600;
 }
 
-#buton2 {
-	width: 20%;
-	height: 7%;
-	margin-bottom:2vh;
-	border-radius:4rem;
-	font-size:1rem;
-	font-weight: 700;
-	color: white;
-	background-color: var(--main-color); 
-	transition: 0.3 ease-in-out;
-	cursor:pointer;
+.center-buttons a 
+{
+	width: 26%;
+	height: 40%;
 }
-
-
-#buton2:hover {
-	transform: scale(1.05);
-	background-color: var(--background-color);
-	color: var(--main-color);
-	border: 2px solid var(--main-color);
-}
-
-
 
 #coffee-title 
 {
@@ -491,3 +489,74 @@
 	color: black;
 
 }
+
+#chatbot-button {
+	position: fixed;
+	bottom: 20px;
+	left: 20px;
+	background-color: #e4b381;
+	color: #fff;
+	border: none;
+	padding: 10px 15px;
+	border-radius: 20px;
+	cursor: pointer;
+	box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+#chatbot-container {
+	position: fixed;
+	bottom: 70px;
+	left: 20px;
+	width: 300px;
+	height: 400px;
+	background-color: #fff;
+	border: 1px solid #ccc;
+	border-radius: 10px;
+	box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.3);
+	display: none; /* Hidden by default */
+	flex-direction: column;
+}
+
+#chatbot-header {
+	background-color: #e4b381;
+	color: white;
+	padding: 10px;
+	text-align: center;
+	border-top-left-radius: 10px;
+	border-top-right-radius: 10px;
+	font-weight: bold;
+	display: flex;
+	justify-content: space-between;
+}
+
+#chatbot-messages {
+	flex-grow: 1;
+	padding: 10px;
+	overflow-y: auto;
+	font-size: 14px;
+}
+
+#chatbot-form {
+	display: flex;
+	border-top: 1px solid #ccc;
+}
+
+#chatbot-input {
+	flex-grow: 1;
+	border: none;
+	padding: 10px;
+	font-size: 14px;
+}
+
+#chatbot-input:focus {
+	outline: none;
+}
+
+#chatbot-form button {
+	background-color: #e4b381;
+	border: none;
+	color: white;
+	padding: 10px;
+	cursor: pointer;
+}
+

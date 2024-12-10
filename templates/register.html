@@ -6,10 +6,26 @@
 		<meta name = "Description" content = "coffee shop website">
 		<meta name = "viewport" content = "width=device-width,initial-scale=1.0">
 		<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+		<link rel = "stylesheet" href = " {{ url_for('static', filename = 'register.css') }}" > 
 		<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 		<title>CoffeShop login</title>
 	</head>
 	<body>
+
+
+		<header class = "header">
+
+			<a href = "/menu" class = "logo"><i class='bx bxs-coffee' id = "coffe-font" ></i>Coffe<span>SHOP</span></a>
+
+
+			<ul class = "links">
+				<li><a href = "{{ url_for("login")}}">Login</a>
+				<li><a href = "{{url_for("home") }}">Home</a></li>
+				<li><a href = "{{url_for("about")}}">About us</a>
+			</ul>
+
+		</header>
+
 
 
 
@@ -25,12 +41,22 @@
 
 				<form method = "POST" action = "{{ url_for('register') }}">
 						
-					<label for = "username">Username: 
-					<input type = "text" id = "username" name = "username">
+					<label for = "username">name: 
+					<input type = "text" id = "username" name = "username" required>
 					</label>
 
+					<label for = "lastname">lastname:
+					<input type = "text" id = "lastname" name = "lastname" required>
+					</label>
+
+
+					<label for = "email">email:
+					<input type = "email" id = "email" name = "email" required>
+					</label>
+
+
 					<label for = "password">Password:
-					<input type = "password" id = "password" name = "password">
+					<input type = "password" id = "password" name = "password" required>
 					</label>
 
 					<button type = "submit" class = "button">Register</button>

@@ -26,6 +26,71 @@ body {
 	align-items:center;
 }
 
+.header {
+	position: fixed;
+	top:0;
+	left: 0;
+	width:100%;
+	padding: 2rem 9%;
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	background-color:rgba(0,0,0,0.6);
+	backdrop-filter: blur(20%); 
+	z-index:100;
+
+}
+
+
+.links {
+	width:40%;
+	display:flex;
+	justify-content:space-around;
+	list-style-type:none;
+}
+
+
+.links li a{
+	color: var(--text-color);
+	font-weight: 600;
+	transition: 0.3s ease;
+}
+
+
+.logo {
+	color: var(--text-color);
+	font-weight:800;
+	font-size:2rem; 
+	transition: 0.3s ease;
+	letter-spacing:0.1rem;
+
+}
+
+
+#coffe-font {
+	margin-right: 0.2rem;
+	color: var(--main-color);
+
+}
+
+
+.logo span {
+	color: var(--main-color);
+
+}
+
+.logo:hover {
+	transform: scale(1.1);
+}
+
+.links a:hover 
+{
+	color: var(--main-color);
+	border-bottom:2px solid var(--main-color);
+	font-size:1.2rem;
+}
+
+
 
 .login {
 	border:2px solid var(--main-color);
