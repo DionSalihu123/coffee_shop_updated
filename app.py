@@ -1,150 +1,163 @@
-from flask import Flask,render_template,request,url_for,redirect,session,jsonify 
-from database import get_database
-from werkzeug.security import generate_password_hash, check_password_hash 
-from responses import get_response
+from flask import Flask, render_template, request, url_for, redirect, session, jsonify, abort, flash, g
+from database import get_database, close_database
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
+import sqlite3
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
+# Ensure database connections are closed after each request
+app.teardown_appcontext(close_database)
 
 def get_current_user():
-    user = None
+    return session.get("emri")
 
-    if "emri" in session:
-        user = session["emri"]
-    return user 
+def is_admin():
+    if "user_id" not in session:
+        return False
+    db = get_database()
+    user = db.execute("SELECT role FROM users WHERE id = ?", [session["user_id"]]).fetchone()
+    # do not close here; teardown will handle it
+    return user and user["role"] == "admin"
+
+
+def set_admin_user():
+    db = get_database()
+    username = "admin"  # Change to your desired admin username
+    try:
+        db.execute("UPDATE users SET role = 'admin' WHERE username = ?", [username])
+        db.commit()
+        print(f"User {username} set as admin.")
+    except sqlite3.Error as e:
+        print(f"Error setting admin user: {e}")
 
 @app.route("/")
 @app.route("/home")
 def home():
-    username = get_current_user() 
+    username = get_current_user()
+    return render_template("index.html", username=username, is_admin=is_admin())
 
-    return render_template("index.html",username = username)
-
-
-
-@app.route("/login", methods = ["POST", "GET"])
+@app.route("/login", methods=["POST", "GET"])
 def login():
     user_name = get_current_user()
-
     error = None
     if request.method == "POST":
         username = request.form["username"]
-        user_entered_password = request.form["password"] 
-
+        user_entered_password = request.form["password"]
         db = get_database()
+        user_info = db.execute("SELECT * FROM users WHERE username = ?", [username])
+        user = user_info.fetchone()
 
-        user_info = db.execute("select * from users where username = ?", [username])
+        if user and check_password_hash(user["password"], user_entered_password):
+            session['user_id'] = user['id']
+            session['emri'] = user['username']
+            return redirect(url_for("home"))
+        error = "Invalid username or password!"
 
-        user = user_info.fetchone()  
+    return render_template("login.html", loginerror=error, user_name=user_name)
 
-        if user:
-            if check_password_hash(user["password"], user_entered_password): 
-                session['user_id'] = user['id']  
-                session['emri'] = user['username']
-                return redirect(url_for("home")) 
-            else:
-                error = "please check your password!" 
-
-    return  render_template("login.html", loginerror = error,user_name = user_name)
-
-
-@app.route("/register", methods = ["POST", "GET"])
+@app.route("/register", methods=["POST", "GET"])
 def register():
-    user_name  = get_current_user()
-
-    register_error = None 
+    user_name = get_current_user()
+    register_error = None
 
     if request.method == "POST":
-        username = request.form["username"] 
+        username = request.form["username"]
         lastname = request.form["lastname"]
         email = request.form["email"]
         password = request.form["password"]
+        hashed_password = generate_password_hash(password)
 
-        hashed_password = generate_password_hash(password)  
-        
-        db = get_database() 
-        
-        check_user = db.execute("select * from users where username = ? or email = ?",[username,email]) 
+        db = get_database()
+        check_user = db.execute("SELECT * FROM users WHERE username = ? OR email = ?", [username, email])
         existing_user = check_user.fetchone()
 
-        if existing_user: 
+        if existing_user:
             if existing_user["username"] == username:
-                register_error = "this username already exsist!" 
-                return render_template("register.html",register_error = register_error)
-            elif existing_user["email"] == email:
-                register_error = "this email already exsist!"
-                return render_template("register.html",register_error = register_error)
+                register_error = "This username already exists!"
+            else:
+                register_error = "This email already exists!"
+            return render_template("register.html", register_error=register_error)
 
-
-        db.execute("insert into users (username,lastname,email,password) values (? , ?, ?, ?)", [username,lastname,email,hashed_password])
-
+        db.execute("INSERT INTO users (username, lastname, email, password, role) VALUES (?, ?, ?, ?, ?)",
+                   [username, lastname, email, hashed_password, "user"])
         db.commit()
+        return redirect(url_for("login"))
 
-        return redirect(url_for("login")) 
-    
-    return  render_template("register.html",user_name  = user_name)
+    return render_template("register.html", user_name=user_name)
 
-
-
-
-@app.route("/menu",methods = ["POST","GET"])
+@app.route("/menu", methods=["POST", "GET"])
 def menu():
     username = get_current_user()
-
     if "user_id" not in session:
         return redirect(url_for("login"))
 
     if request.method == "POST":
         item_name = request.form['item']
         item_price = request.form['price']
-
-        db = get_database() 
-
-        db.execute("insert into orders (user_id, item_name, item_price) values (?,?,?)",[session['user_id'],item_name,item_price])
-
+        db = get_database()
+        db.execute("INSERT INTO orders (user_id, item_name, item_price) VALUES (?, ?, ?)",
+                   [session['user_id'], item_name, item_price])
         db.commit()
 
-
-    return render_template("menu.html",username = username)
- 
-
+    return render_template("menu.html", username=username)
 
 @app.route("/about")
 def about():
     username = get_current_user()
+    return render_template("about.html", username=username)
 
+@app.route("/admin", methods=["GET", "POST"])
+def admin_dashboard():
+    if not is_admin():
+        abort(403)
 
-    return render_template("about.html",username = username)
+    db = get_database()
+    users = db.execute("SELECT id, username, lastname, email, role FROM users").fetchall()
 
-
-@app.route("/chatbot", methods=["GET", "POST"])
-def chatbot():
-    # Serve the chatbot UI on GET request
-    if request.method == "GET":
-        return render_template("index.html")  # Your chatbot HTML
-
-    # Handle POST request and respond with a message
     if request.method == "POST":
-        data = request.json
-        if not data or "message" not in data:
-            return jsonify({"error": "Invalid request. 'message' is required."}), 400
+        user_id = request.form.get("user_id")
+        action = request.form.get("action")
 
-        user_message = data["message"].lower()
-        response = get_response(user_message) 
-        return jsonify({"response": response})
+        if action == "update_role":
+            new_role = request.form.get("role")
+            if new_role in ["user", "admin"]:
+                db.execute("UPDATE users SET role = ? WHERE id = ?", [new_role, user_id])
+                db.commit()
+                flash("User role updated.", "success")
 
-    return render_template("index.html")
+        elif action == "delete":
+            if int(user_id) != session["user_id"]:
+                db.execute("DELETE FROM users WHERE id = ?", [user_id])
+                db.commit()
+                flash("User deleted.", "success")
+            else:
+                flash("You cannot delete yourself!", "danger")
 
+        elif action == "reset_password":
+            new_password = request.form.get("new_password")
+            if new_password:
+                hashed = generate_password_hash(new_password)
+                db.execute("UPDATE users SET password = ? WHERE id = ?", [hashed, user_id])
+                db.commit()
+                flash("Password has been reset.", "success")
+            else:
+                flash("Please provide a new password.", "warning")
 
+        users = db.execute("SELECT id, username, lastname, email, role FROM users").fetchall()
+
+    return render_template("admin.html", users=users, username=session.get("emri"), is_admin=is_admin())
 
 @app.route("/logout")
 def logout():
-
-    session.clear() 
+    session.clear()
     return redirect(url_for("home"))
 
+@app.errorhandler(403)
+def forbidden(e):
+    return render_template("error.html", message="You do not have permission to access this page."), 403
 
-if __name__ == '__main__':
-    app.run(debug = True)
-
+if __name__ == "__main__":
+    with app.app_context():
+        set_admin_user()  # Only run once, then comment this out
+    app.run(debug=True)

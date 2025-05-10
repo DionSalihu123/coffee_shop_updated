@@ -16,16 +16,19 @@
 			<a href = "#home" class = "logo"><i class='bx bxs-coffee' id = "coffe-font" ></i>Coffe<span>SHOP</span></a>
 
 
-			<ul class = "links">
-				<li><a href = "#home">Home</a></li>
-				<li><a href = "#coffees">Coffees</a></li>
-				<li><a href = "#about">About us</a>
-				<li><a href = "#reviews">Reviews</a>
-				<li><a href = "#contact">Contact</a>
+			<ul class="links">
+				<li><a href="#home">Home</a></li>
+				<li><a href="#coffees">Coffees</a></li>
+				<li><a href="#about">About us</a></li>
+				<li><a href="#reviews">Reviews</a></li>
+				<li><a href="#contact">Contact</a></li>
 				{% if username %}
- 				<li  id = "provided-username"><i class='bx bxs-user'id = "user-logo" ></i>   {{ username }}</li>
+				{% if is_admin %}
+				<li><a href="{{ url_for('admin_dashboard') }}">Admin Dashboard</a></li>
 				{% endif %}
-			</ul>
+				<li id="provided-username"><i class='bx bxs-user' id="user-logo"></i>{{ username }}</li>
+				{% endif %}
+			</ul>	
 
 		</header>
 
@@ -42,34 +45,15 @@
 
 				<div class = "center-buttons">
 					{% if username %}
-					<a href = "{{ url_for("logout") }}">
+					<a href = "{{ url_for('logout') }}">
 						<button type = "submit" class = 'button' id = "buton1">Logout</button>
 					</a>
 					{% else %}
-					<a href = "{{ url_for("login") }}">
+					<a href = "{{ url_for('login') }}">
 						<button type = "submit" class = 'button' id = "buton1">Login</button>
 					</a>
 					{% endif %}
 				</div>
-
-				<!-- Chatbot Button -->
-				<button id="chatbot-button" onclick="toggleChatbot()">Chat with us!</button>
-
-				<!-- Chatbot Interface -->
-				<div id="chatbot-container">
-					<div id="chatbot-header">
-						<span>Chatbot</span>
-						<button id="close-chatbot" onclick="toggleChatbot()">X</button>
-					</div>
-					<div id="chatbot-messages"></div>
-					<form id="chatbot-form" method="POST">
-						<input type="text" id="chatbot-input" placeholder="Type your question..." required>
-						<button type="submit">Send</button>
-					</form>
-				</div>
-
-				<script src = "{{url_for("static",filename = 'script.js') }}"></script>
-
 			</div>
 
 		</section>
