@@ -110,7 +110,7 @@ def about():
 @app.route("/admin", methods=["GET", "POST"])
 def admin_dashboard():
     if not is_admin():
-        abort(403)
+        return redirect(url_for('login')) 
 
     db = get_database()
     users = db.execute("SELECT id, username, lastname, email, role FROM users").fetchall()
