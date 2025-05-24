@@ -100,19 +100,19 @@
                         <td>{{ product.name }}</td>
                         <td>{{ product.price }}</td>
                         <td>{{ product.description }}</td>
-                        <td>
+                        <td id = "td-image">
                             {% if product.image %}
                             <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" width="50">
                             {% else %}
                             No image
                             {% endif %}
                         </td>
-                        <td>
-                            <a href="{{ url_for('edit_product', product_id=product.id) }}"><button>Edit</button></a>
+                        <td class = "buttons" >
+                            <a href="{{ url_for('edit_product', product_id=product.id) }}"><button class ="btn edit">Edit</button></a>
                             <form method="POST" style="display:inline;">
                                 <input type="hidden" name="product_id" value="{{ product.id }}">
                                 <input type="hidden" name="action" value="delete">
-                                <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                                <button type="submit" onclick="return confirm('Are you sure?')" class = "btn delete">Delete</button>
                             </form>
                         </td>
                     </tr>

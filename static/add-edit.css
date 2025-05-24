@@ -1,0 +1,161 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    text-decoration:none;
+    border:none; 
+    outline:none;
+    scroll-behavior: smooth;
+    font-family: "Poppins",sans-serif;
+}
+
+body {
+    width: 100vw;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: 12vh auto;
+    row-gap: 3%;
+    background-image: url('/static/images/coffe.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+
+:root {
+	--background-color: #080808;
+	--text-color: white;
+	--main-color: #e4b381;
+}
+
+.header {
+	position: fixed;
+    grid-row: 1/2;
+	top:0;
+	left: 0;
+	width:100%;
+	padding: 2rem 9%;
+	display:flex;
+	justify-content:space-between;
+	align-items:center;
+	background-color:rgba(0,0,0,0.6);
+	backdrop-filter: blur(20%); 
+	z-index:100;
+
+}
+
+.links {
+	width:40%;
+	display:flex;
+	justify-content:space-around;
+	list-style-type:none;
+}
+
+
+.links li a{
+    color: white;
+	font-weight: 600;
+	transition: 0.3s ease;
+}
+
+
+.logo {
+	color: var(--text-color);
+	font-weight:800;
+	font-size:2rem; 
+	transition: 0.3s ease;
+	letter-spacing:0.1rem;
+
+}
+
+#username-e {
+    color: white;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
+#coffe-font {
+	margin-right: 0.2rem;
+	color: var(--main-color);
+
+}
+
+
+.logo span {
+	color: var(--main-color);
+
+}
+
+.logo:hover {
+	transform: scale(1.1);
+}
+
+.links a:hover 
+{
+	color: var(--main-color);
+	border-bottom:2px solid var(--main-color);
+	font-size:1.2rem;
+}
+
+#provided-username {
+	align-self: center;
+	justify-self: center;
+	font-size: 1.1rem;
+	font-weight: 600;
+
+}
+
+
+#user-logo {
+	color: white;
+	font-size: 1.2rem;
+	font-weight: 600;
+}
+
+.admin-container {
+    grid-row: 2/3;
+    width: 100%;
+	margin: 50px auto;
+	padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    background-color:rgba(0,0,0,0.9);
+	backdrop-filter: blur(20%); 
+}
+
+h1,p,label,a {
+	color: var(--text-color);
+	text-align: center;
+}
+
+form {
+	width: 50%;
+	height: 60%;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between; 
+	align-items: center;
+}
+
+button {
+	color: white;
+	font-weight: 500;
+	background-color: #e4b381;
+	border-radius: 5% ;
+	width: 17%;
+	transition: 0.3s ease-in-out;
+}
+
+button:hover {
+	transform: scale(1.01);
+}
+
+img {
+	height: 50%;
+	border-radius: 5%;
+}
+
+input {
+	text-align: center;
+}

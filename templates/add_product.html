@@ -8,25 +8,49 @@
 </head>
 
 <body>
-    <h1>Add New Product</h1>
-    {% with messages = get_flashed_messages(with_categories=true) %}
-    {% if messages %}
-    {% for category, message in messages %}
-    <p class="{{ category }}">{{ message }}</p>
-    {% endfor %}
-    {% endif %}
-    {% endwith %}
-    <form method="POST" enctype="multipart/form-data">
-        <label for="name">Name:</label>
-        <input type="text" id="name" name="name" required><br>
-        <label for="price">Price:</label>
-        <input type="number" step="0.01" id="price" name="price" required><br>
-        <label for="description">Description:</label>
-        <textarea id="description" name="description"></textarea><br>
-        <label for="image">Image:</label>
-        <input type="file" id="image" name="image"><br>
-        <button type="submit">Add Product</button>
-    </form>
-    <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+    <header class="header">
+        <a href="{{ url_for('home') }}" class="logo"><i class='bx bxs-coffee'></i>Coffe<span>SHOP</span></a>
+        <ul class="links">
+            <li><a href="{{ url_for('home') }}">Home</a></li>
+            <li><a href="{{ url_for('menu') }}">Menu</a></li>
+            <li><a href="{{ url_for('about') }}">About</a></li>
+            {% if username %}
+            <li id="username-e"><i class='bx bxs-user'></i>{{ username }}</li>
+            <li><a href="{{ url_for('logout') }}">Logout</a></li>
+            {% else %}
+            <li><a href="{{ url_for('login') }}">Login</a></li>
+            {% endif %}
+        </ul>
+    </header>
+    <section class="admin-container">
+        <h1>Add New Product</h1>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <p class="{{ category }}">{{ message }}</p>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+        <form method="POST" enctype="multipart/form-data">
+            <label for="name">Name:
+            <input type="text" id="name" name="name" required><br>
+            </label>
+
+            <label for="price">Price:
+            <input type="number" step="0.01" id="price" name="price" required><br>
+            </label>
+
+            <label for="description">Description:
+            <textarea id="description" name="description"></textarea><br>
+            </label>
+
+            <label for="image">Image:
+            <input type="file" id="image" name="image"><br>
+            </label>
+
+            <button type="submit">Add Product</button>
+        </form>
+        <a href="{{ url_for('admin_dashboard') }}">Back to Dashboard</a>
+    </section>
 </body>
 </html>
