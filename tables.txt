@@ -14,3 +14,22 @@ CREATE TABLE users (
     password VARCHAR(128) NOT NULL, -- Increased length for hashed passwords
     role TEXT DEFAULT 'user' -- Added role column
 );
+
+CREATE TABLE products (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    price REAL NOT NULL,
+    description TEXT,
+    image TEXT
+);
+
+INSERT INTO products (name, price, description, image) VALUES
+('Cappuccino', 4.00, 'Espresso with steamed milk and foam.', 'coffees/capuccino.jpg'),
+('Espresso', 3.00, 'Strong, concentrated coffee.', 'coffees/espresso.jpg'),
+('Mocha', 5.00, 'Espresso with chocolate and steamed milk.', 'coffees/mocha.jpg'),
+('Americano', 3.00, 'Espresso with hot water.', 'coffees/americano.jpg'),
+('Affogato', 5.00, 'Espresso poured over ice cream.', 'coffees/affogato.jpg'),
+('French Press', 4.00, 'Coffee brewed using a French press.', 'coffees/french-press.jpg'),
+('Piccolo Latte', 4.00, 'A small latte with a strong coffee flavor.', 'coffees/piccolo-late.jpg'),
+('Cortado', 5.00, 'Espresso with a small amount of steamed milk.', 'coffees/cortado.jpg'),
+('Frappuccino', 6.00, 'Blended coffee drink with ice and milk.', 'coffees/frappuccino.jpg');

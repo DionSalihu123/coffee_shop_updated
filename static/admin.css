@@ -120,7 +120,7 @@ body {
 	padding: 20px;
     display: flex;
     flex-direction: column;
-    justify-content: start;
+    justify-content: space-between;
     align-items: center;
     background-color:rgba(0,0,0,0.9);
 	backdrop-filter: blur(20%); 
@@ -132,7 +132,7 @@ h2,p {
 
 .admin-div {
     border: 1px solid black;
-    width: 70%;
+    width: 80%;
     margin-top: 1%;
     height: auto;
     display: flex;
@@ -169,3 +169,4 @@ td {
     background-color: #e4b381;
     font-weight: 500;
 }
+

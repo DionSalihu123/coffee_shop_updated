@@ -1,11 +1,16 @@
 from flask import Flask, render_template, request, url_for, redirect, session, jsonify, abort, flash, g
 from database import get_database, close_database
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 import os
 import sqlite3
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = os.urandom(24)
+app.config['UPLOAD_FOLDER'] = 'static/uploads'  # Define upload folder
+# Ensure upload folder exists
+if not os.path.exists(app.config['UPLOAD_FOLDER']):
+    os.makedirs(app.config['UPLOAD_FOLDER'])
 # Ensure database connections are closed after each request
 app.teardown_appcontext(close_database)
 
@@ -17,13 +22,11 @@ def is_admin():
         return False
     db = get_database()
     user = db.execute("SELECT role FROM users WHERE id = ?", [session["user_id"]]).fetchone()
-    # do not close here; teardown will handle it
     return user and user["role"] == "admin"
-
 
 def set_admin_user():
     db = get_database()
-    username = "admin"  # Change to your desired admin username
+    username = "admin"
     try:
         db.execute("UPDATE users SET role = 'admin' WHERE username = ?", [username])
         db.commit()
@@ -114,39 +117,123 @@ def admin_dashboard():
 
     db = get_database()
     users = db.execute("SELECT id, username, lastname, email, role FROM users").fetchall()
+    products = db.execute("SELECT id, name, price, description, image FROM products").fetchall()
 
     if request.method == "POST":
+        # Handle user actions
         user_id = request.form.get("user_id")
-        action = request.form.get("action")
+        if user_id:
+            action = request.form.get("action")
+            if action == "update_role":
+                new_role = request.form.get("role")
+                if new_role in ["user", "admin"]:
+                    db.execute("UPDATE users SET role = ? WHERE id = ?", [new_role, user_id])
+                    db.commit()
+                    flash("User role updated.", "success")
+            elif action == "delete":
+                if int(user_id) != session["user_id"]:
+                    db.execute("DELETE FROM users WHERE id = ?", [user_id])
+                    db.commit()
+                    flash("User deleted.", "success")
+                else:
+                    flash("You cannot delete yourself!", "danger")
 
-        if action == "update_role":
-            new_role = request.form.get("role")
-            if new_role in ["user", "admin"]:
-                db.execute("UPDATE users SET role = ? WHERE id = ?", [new_role, user_id])
+    return render_template("admin.html", users=users, products=products, username=session.get("emri"), is_admin=is_admin())
+
+@app.route("/admin/products/add", methods=["GET", "POST"])
+def add_product():
+    if not is_admin():
+        return redirect(url_for('login'))
+    if request.method == "POST":
+        name = request.form.get("name")
+        price = request.form.get("price")
+        description = request.form.get("description")
+        image = request.files.get("image")
+        if name and price:
+            try:
+                price = float(price)
+                if price < 0:
+                    flash("Price cannot be negative.", "danger")
+                    return render_template("add_product.html", username=session.get("emri"), is_admin=is_admin())
+                db = get_database()
+                cursor = db.execute("INSERT INTO products (name, price, description) VALUES (?, ?, ?)", [name, price, description])
                 db.commit()
-                flash("User role updated.", "success")
+                product_id = cursor.lastrowid
+                if image and image.filename:
+                    if not image.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                        flash("Only PNG, JPG, and JPEG files are allowed.", "danger")
+                        return render_template("add_product.html", username=session.get("emri"), is_admin=is_admin())
+                    filename = secure_filename(f"{product_id}{os.path.splitext(image.filename)[1]}")
+                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    image.save(image_path)
+                    db.execute("UPDATE products SET image = ? WHERE id = ?", [f'uploads/{filename}', product_id])
+                    db.commit()
+                flash("Product added successfully.", "success")
+            except ValueError:
+                flash("Invalid price value.", "danger")
+            except sqlite3.Error as e:
+                flash(f"Database error: {e}", "danger")
+        else:
+            flash("Name and price are required.", "danger")
+        return redirect(url_for("admin_dashboard"))
+    return render_template("add_product.html", username=session.get("emri"), is_admin=is_admin())
 
-        elif action == "delete":
-            if int(user_id) != session["user_id"]:
-                db.execute("DELETE FROM users WHERE id = ?", [user_id])
+@app.route("/admin/products/edit/<int:product_id>", methods=["GET", "POST"])
+def edit_product(product_id):
+    if not is_admin():
+        return redirect(url_for('login'))
+    db = get_database()
+    product = db.execute("SELECT id, name, price, description, image FROM products WHERE id = ?", [product_id]).fetchone()
+    if not product:
+        flash("Product not found.", "danger")
+        return redirect(url_for("admin_dashboard"))
+    if request.method == "POST":
+        name = request.form.get("name")
+        price = request.form.get("price")
+        description = request.form.get("description")
+        image = request.files.get("image")
+        existing_image = request.form.get("existing_image", product['image'])  # Retain existing image if no new upload
+        if name and price:
+            try:
+                price = float(price)
+                if price < 0:
+                    flash("Price cannot be negative.", "danger")
+                    return render_template("edit_product.html", product=product, username=session.get("emri"), is_admin=is_admin())
+                image_path = existing_image
+                if image and image.filename:
+                    if not image.filename.lower().endswith(('.png', '.jpg', '.jpeg')):
+                        flash("Only PNG, JPG, and JPEG files are allowed.", "danger")
+                        return render_template("edit_product.html", product=product, username=session.get("emri"), is_admin=is_admin())
+                    filename = secure_filename(f"{product_id}{os.path.splitext(image.filename)[1]}")
+                    image_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+                    image.save(image_path)
+                    image_path = f'uploads/{filename}'
+                db.execute("UPDATE products SET name = ?, price = ?, description = ?, image = ? WHERE id = ?",
+                           [name, price, description, image_path, product_id])
                 db.commit()
-                flash("User deleted.", "success")
-            else:
-                flash("You cannot delete yourself!", "danger")
+                flash("Product updated successfully.", "success")
+            except ValueError:
+                flash("Invalid price value.", "danger")
+            except sqlite3.Error as e:
+                flash(f"Database error: {e}", "danger")
+        else:
+            flash("Name and price are required.", "danger")
+        return redirect(url_for("admin_dashboard"))
+    return render_template("edit_product.html", product=product, username=session.get("emri"), is_admin=is_admin())
 
-        elif action == "reset_password":
-            new_password = request.form.get("new_password")
-            if new_password:
-                hashed = generate_password_hash(new_password)
-                db.execute("UPDATE users SET password = ? WHERE id = ?", [hashed, user_id])
-                db.commit()
-                flash("Password has been reset.", "success")
-            else:
-                flash("Please provide a new password.", "warning")
-
-        users = db.execute("SELECT id, username, lastname, email, role FROM users").fetchall()
-
-    return render_template("admin.html", users=users, username=session.get("emri"), is_admin=is_admin())
+@app.route("/admin/products/delete/<int:product_id>", methods=["POST"])
+def delete_product(product_id):
+    if not is_admin():
+        return redirect(url_for('login'))
+    db = get_database()
+    product = db.execute("SELECT id FROM products WHERE id = ?", [product_id]).fetchone()
+    if product:
+        db.execute("DELETE FROM products WHERE id = ?", [product_id])
+        db.commit()
+        flash("Product deleted successfully.", "success")
+    else:
+        flash("Product not found.", "danger")
+    return redirect(url_for("admin_dashboard"))
 
 @app.route("/logout")
 def logout():
@@ -159,5 +246,5 @@ def forbidden(e):
 
 if __name__ == "__main__":
     with app.app_context():
-        set_admin_user()  # Only run once, then comment this out
+        set_admin_user()
     app.run(debug=True)

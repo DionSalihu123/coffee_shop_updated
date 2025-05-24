@@ -14,60 +14,113 @@
             <li><a href="{{ url_for('menu') }}">Menu</a></li>
             <li><a href="{{ url_for('about') }}">About</a></li>
             {% if username %}
-            <li id = "username-e"><i class='bx bxs-user'></i>{{ username }}</li>
+            <li id="username-e"><i class='bx bxs-user'></i>{{ username }}</li>
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
             {% else %}
             <li><a href="{{ url_for('login') }}">Login</a></li>
             {% endif %}
         </ul>
     </header>
-<section class="admin-container">
-    <h2>Admin Dashboard</h2>
-    <p>Manage users below:</p>
+    <section class="admin-container">
+        <h2>Admin Dashboard</h2>
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <ul>
+                    {% for category, message in messages %}
+                        <li class="{{ category }}">{{ message }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endwith %}
 
-    <div class="admin-div">
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Username</th>
-                    <th>Lastname</th>
-                    <th>Email</th>
-                    <th>Role</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for user in users %}
-                <tr>
-                    <td>{{ user.id }}</td>
-                    <td>{{ user.username }}</td>
-                    <td>{{ user.lastname }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.role }}</td>
-                    <td>
-                        <form method="POST" style="display:inline;">
-                            <input type="hidden" name="user_id" value="{{ user.id }}">
-                            <input type="hidden" name="action" value="update_role">
-                            <select name="role" id = "change-role">
-                                <option value="user" {% if user.role=='user' %}selected{% endif %}>User</option>
-                                <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option>
-                            </select>
-                            <button type="submit" class="button">Update Role</button>
-                        </form>
-                        <form method="POST" style="display:inline;">
-                            <input type="hidden" name="user_id" value="{{ user.id }}">
-                            <input type="hidden" name="action" value="delete">
-                            <button type="submit" class="button"
-                                onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
-                        </form>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <!-- User Management Section -->
+        <h2>Manage Users</h2>
+        <div class="admin-div">
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Lastname</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for user in users %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.role }}</td>
+                        <td>
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <input type="hidden" name="action" value="update_role">
+                                <select name="role" id="change-role">
+                                    <option value="user" {% if user.role=='user' %}selected{% endif %}>User</option>
+                                    <option value="admin" {% if user.role=='admin' %}selected{% endif %}>Admin</option>
+                                </select>
+                                <button type="submit" class="button">Update Role</button>
+                            </form>
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="user_id" value="{{ user.id }}">
+                                <input type="hidden" name="action" value="delete">
+                                <button type="submit" class="button" onclick="return confirm('Are you sure you want to delete this user?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Product Management Section -->
+        <h2>Manage Products</h2>
+        <div class="admin-div">
+            <a href="{{ url_for('add_product') }}"><button class="button">Add Product</button></a>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Image</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for product in products %}
+                    <tr>
+                        <td>{{ product.id }}</td>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>{{ product.description }}</td>
+                        <td>
+                            {% if product.image %}
+                            <img src="{{ url_for('static', filename=product.image) }}" alt="{{ product.name }}" width="50">
+                            {% else %}
+                            No image
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('edit_product', product_id=product.id) }}"><button>Edit</button></a>
+                            <form method="POST" style="display:inline;">
+                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <input type="hidden" name="action" value="delete">
+                                <button type="submit" onclick="return confirm('Are you sure?')">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
         <a href="{{ url_for('home') }}"><button class="button">Back to Home</button></a>
-    </div>
-</section>
+    </section>
 </body>
 </html>

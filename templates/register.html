@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset = "UTF-8">
-		<meta name = "Author" content = "Dion Salihu Behar Mahmuti">
+		<meta name = "Author" content = "Behar Mahmuti">
 		<meta name = "Description" content = "coffee shop website">
 		<meta name = "viewport" content = "width=device-width,initial-scale=1.0">
 		<link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
@@ -19,9 +19,9 @@
 
 
 			<ul class = "links">
-				<li><a href = "{{ url_for("login")}}">Login</a>
-				<li><a href = "{{url_for("home") }}">Home</a></li>
-				<li><a href = "{{url_for("about")}}">About us</a>
+				<li><a href = "{{ url_for('login')}}">Login</a>
+				<li><a href = "{{url_for('home') }}">Home</a></li>
+				<li><a href = "{{url_for('about')}}">About us</a>
 			</ul>
 
 		</header>
